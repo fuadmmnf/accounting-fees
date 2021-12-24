@@ -23,6 +23,6 @@ class CreateDefaultFeesTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('default_configs');
+        Schema::dropIfExists('default_fees');
     }
 }
