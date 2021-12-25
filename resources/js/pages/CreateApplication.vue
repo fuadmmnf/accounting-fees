@@ -1,36 +1,40 @@
 <template>
-    <div>
+    <div class="q-pa-lg q-ml-md">
         <q-form
             @submit="storeApplication"
             class="q-gutter-md"
         >
-            <q-input filled v-model="applicationForm.date" mask="date" :rules="['date']">
-                <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
-                        <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
-                            <q-date v-model="applicationForm.date">
-                                <div class="row items-center justify-end">
-                                    <q-btn v-close-popup label="Close" color="primary" flat />
-                                </div>
-                            </q-date>
-                        </q-popup-proxy>
-                    </q-icon>
-                </template>
-            </q-input>
+            <div class="row">
+                <q-input class="col-md-3 col-xs-12 q-pr-md" filled v-model="applicationForm.date" mask="date" :rules="['date']" label="Date">
+                    <template v-slot:append>
+                        <q-icon name="event" class="cursor-pointer">
+                            <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
+                                <q-date v-model="applicationForm.date">
+                                    <div class="row items-center justify-end">
+                                        <q-btn v-close-popup label="Close" color="primary" flat />
+                                    </div>
+                                </q-date>
+                            </q-popup-proxy>
+                        </q-icon>
+                    </template>
+                </q-input>
 
-            <q-select filled v-model="applicationForm.category_id" :options="categories" label="Category" />
+                <q-select class="col-md-4 col-xs-12 q-pr-md q-pb-md" filled v-model="applicationForm.category_id" :options="categories" label="Category" />
 
-            <q-input
-                filled
-                type="number"
-                v-model="applicationForm.amount"
-                label="Application Value"
-                lazy-rules
-                :rules="[
+                <q-input
+                    class="col-md-3 col-xs-12 q-pr-md"
+                    filled
+                    type="number"
+                    v-model="applicationForm.amount"
+                    label="Application Value"
+                    lazy-rules
+                    :rules="[
           val => val !== null && val !== '' || 'Please type value',
           val => val > 0  || 'Please type a real value'
         ]"
-            />
+                />
+
+            </div>
 
 
             <div>
