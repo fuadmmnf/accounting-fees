@@ -10,6 +10,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
+        $categories->load('defaultfees', 'defaultfees.field');
         return response()->json($categories);
     }
 
