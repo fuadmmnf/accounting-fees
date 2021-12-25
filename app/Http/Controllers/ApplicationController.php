@@ -9,9 +9,14 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ApplicationController extends Controller {
-	public function index() {
-        $selectedDate = Carbon::today();
-        $selectedDayApplications = Application::whereDate('date', $selectedDate)->get();
+	public function index(Request $request) {
+        $selectedDate = Carbon::parse($request->query('selected_date'));
+        $categoryId = $request->query('category_id');
+        $selectedDayApplications = Application::whereDate('date', $selectedDate);
+        if($categoryId != 0){
+            $selectedDayApplications->where('category_id', $categoryId);
+        }
+        $selectedDayApplications = $selectedDayApplications->get();
         $selectedDayApplications->load('applicationfees', 'applicationfees.field');
         return response()->json($selectedDayApplications);
 	}
