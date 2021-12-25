@@ -10,7 +10,7 @@ require('./bootstrap')
 import App from "./app.vue"
 
 Vue.use(Quasar, {
-    lang: langQ,
+    // lang: langQ,
     config: {
         brand: {
             primary: '#048BE3',
