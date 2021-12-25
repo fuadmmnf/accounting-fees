@@ -42,28 +42,14 @@
 
             </div>
 
-            <div v-if="applicationForm.fields.length">
                 <q-table
+                    v-if="getApplicationFields.length"
                     title="Fees"
                     dense
-                    :rows="applicationForm.fields"
+                    :rows="getApplicationFields"
                     :columns="columns"
-                    row-key="name"
                 />
 
-<!--                <table>-->
-<!--                    <tr>-->
-<!--                        <th>Field Name</th>-->
-<!--                        <th>Rate</th>-->
-<!--                        <th>Value</th>-->
-<!--                    </tr>-->
-<!--                    <tr v-for="df in applicationForm.fields" :key="df.field_id">-->
-<!--                        <td>{{df.optional_field_name}}</td>-->
-<!--                        <td>{{df.amount}} {{(df.unit == 0? '%': 'tk')}}</td>-->
-<!--                        <td>{{df.unit == 0? (applicationForm.amount * df.amount/100.0): df.amount}}</td>-->
-<!--                    </tr>-->
-<!--                </table>-->
-            </div>
 
             <div>
                 <q-btn label="Generate Fees" type="button" color="primary" @click="generateFees"/>
@@ -86,27 +72,30 @@ const generateApplicationTemplate = () => {
     }
 }
 
-const columns = [
-    {
-        name: 'name',
-        required: true,
-        label: 'Field Name',
-        align: 'center',
-        field: row => row.optional_field_name,
-    },
-    { name: 'rate', align: 'center', label: 'Rate(%|tk)',  field: row => `${row.amount} ${row.unit == 0? '%': 'tk'}`},
-    { name: 'value', align: 'center', label: 'Value', field: row => (row.unit == 0? (row.application_amount * row.amount/100.0): row.amount) + ' tk', sortable: true },
-
-]
 
 
 export default {
     name: "CreateApplication",
     data() {
         return {
-            columns,
+            columns: [
+                {
+                    name: 'optional_field_name',
+                    required: true,
+                    label: 'Field Name',
+                    field: row => row.optional_field_name,
+                },
+                { name: 'unit',  label: 'Rate(%|tk)',  field: row => `${row.amount} ${row.unit == 0? '%': 'tk'}`},
+                { name: 'amount',  label: 'Value', field: row => `${(row.unit == 0? (row.application_amount * row.amount/100.0): row.amount)} tk`, sortable: true },
+
+            ],
             categories: [],
-            applicationForm: generateApplicationTemplate()
+            applicationForm: generateApplicationTemplate(),
+        }
+    },
+    computed: {
+        getApplicationFields(){
+            return this.applicationForm.fields
         }
     },
     mounted() {
@@ -120,7 +109,7 @@ export default {
                 })
         },
         generateFees() {
-            const defaultFees = this.categories.find(c => c.id === this.applicationForm.category_id).defaultfees
+            let defaultFees = this.categories.find(c => c.id === this.applicationForm.category_id).defaultfees
             this.applicationForm.fields = defaultFees.map(df => {
                 return {
                     field_id: df.field.id,
