@@ -81,7 +81,7 @@ export default {
 
                 {
                     title: 'Report',
-                    caption: 'daily|monthly|yearly accounting reports',
+                    caption: 'daily | monthly | yearly accounting reports',
                     icon: 'assignment',
                     link: {name: 'report'},
                     blank: false

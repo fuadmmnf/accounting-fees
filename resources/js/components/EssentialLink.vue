@@ -5,6 +5,7 @@
     :target="blank? '_blank' : ''"
     :tag="blank? 'a' : null"
     :href="blank? link : null"
+    :active="link.name === $route.name"
   >
     <q-item-section
       v-if="icon"
