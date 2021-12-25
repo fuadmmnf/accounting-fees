@@ -40,6 +40,8 @@ class ApplicationController extends Controller {
                 'amount' => ($field? $field->amount: $fieldInfo['amount'])
             ]);
         }
+
+        return response()->json($application, 201);
 	}
 
 	public function show($id) {
@@ -51,6 +53,7 @@ class ApplicationController extends Controller {
 	}
 
 	public function destroy($id) {
-		//
+		Application::destroy($id);
+		return response()->noContent();
 	}
 }
