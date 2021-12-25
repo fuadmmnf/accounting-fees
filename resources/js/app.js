@@ -3,6 +3,7 @@ import Quasar from 'quasar'
 import langQ from 'quasar/lang/es'
 import store from './store'
 import router from './router'
+window.Vue = require('vue').default;
 
 require('./bootstrap')
 
@@ -25,7 +26,6 @@ Vue.use(Quasar, {
         }
     }
 });
-
 
 window.app = new Vue({
     el: '#app',
