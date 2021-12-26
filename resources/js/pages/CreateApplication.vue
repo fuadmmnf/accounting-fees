@@ -70,7 +70,6 @@
                     </q-tr>
                 </template>
 
-
                 <template v-slot:top-right>
                     <q-btn color="white" text-color="primary" size="sm" label="custom field" icon="add"
                            @click="showCustomFieldDialog"/>
@@ -169,7 +168,6 @@ export default {
                     field: row => `${(row.unit == 0 ? (row.application_amount * row.amount / 100.0) : row.amount)} tk`,
                     sortable: true
                 },
-
             ],
             categories: [],
             customField: {},
