@@ -214,6 +214,7 @@ export default {
         },
         clearForm() {
             this.applicationForm = generateApplicationTemplate()
+            this.isTableVisible = false
         },
         storeApplication() {
             this.$axios.post('/api/applications', this.applicationForm)

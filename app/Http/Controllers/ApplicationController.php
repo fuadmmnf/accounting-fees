@@ -29,23 +29,29 @@ class ApplicationController extends Controller {
             'fields' => 'required|array' // field_id, optional_field_name, unit, amount
         ]);
 
-        $application = Application::create([
-            'category_id' => $validated['category_id'],
-            'date' => Carbon::parse($validated['date']),
-            'amount' => $validated['amount']
-        ]);
-
-        foreach ($validated['fields'] as $fieldInfo){
-            $field = (is_numeric($fieldInfo['field_id']))? Field::find($fieldInfo['field_id']): null;
-            ApplicationFee::create([
-                'application_id' => $application->id,
-                'field_id' => ($field? $field->id: null),
-                'optional_field_name' => ($field? '': $fieldInfo['optional_field_name']),
-                'unit' => ($field? $field->unit: $fieldInfo['unit']),
-                'amount' => ($field? $field->amount: $fieldInfo['amount'])
+        \DB::beginTransaction();
+        try {
+            $application = Application::create([
+                'category_id' => $validated['category_id'],
+                'date' => Carbon::createFromFormat('d/m/Y', $validated['date']),
+                'amount' => $validated['amount']
             ]);
-        }
 
+            foreach ($validated['fields'] as $fieldInfo) {
+                $field = (is_numeric($fieldInfo['field_id'])) ? Field::find($fieldInfo['field_id']) : null;
+                ApplicationFee::create([
+                    'application_id' => $application->id,
+                    'field_id' => ($field ? $field->id : null),
+                    'optional_field_name' => ($field ? '' : $fieldInfo['optional_field_name']),
+                    'unit' => $fieldInfo['unit'],
+                    'amount' => $fieldInfo['amount']
+                ]);
+            }
+        } catch (\Exception $exception){
+            \DB::rollBack();
+            return response()->json($exception->getMessage(), 500);
+        }
+        \DB::commit();
         return response()->json($application, 201);
 	}
 
