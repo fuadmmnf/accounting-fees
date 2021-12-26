@@ -55,7 +55,7 @@ export default {
                 })
         },
         async generateReport(type) {
-            window.open(`reports?type=${type}&category_id=${this.selectedCategory}&date=${this.selectedDate.from.replaceAll('/', '-')}`, '_blank')
+            window.open(`/reports?type=${type}&category_id=${this.selectedCategory}&date=${this.selectedDate}`, '_blank')
         },
     }
 }

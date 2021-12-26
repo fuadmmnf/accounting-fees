@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // TODO: Always leave this as last one
+Route::get('/reports', [\App\Http\Controllers\PdfController::class, 'index']);
 Route::get('{any}', function () {
     return view('index');
 })->where('any', '.*');
