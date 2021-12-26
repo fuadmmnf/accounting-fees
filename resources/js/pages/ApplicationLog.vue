@@ -2,7 +2,7 @@
     <div class="q-pa-md">
         <q-table
             title="Deeds"
-            :data="applications"
+            :data="getFilteredApplications"
             :columns="columns"
             :rows-per-page-options="[0]"
             :pagination.sync="pagination"
@@ -48,7 +48,9 @@
                               option-label="label"
                               map-options
                               emit-value
-                              label="Category Filter"/>
+                              label="Category Filter"
+
+                    />
                 </div>
 
             </template>
@@ -101,6 +103,16 @@ export default {
             categories: [],
             applications: [],
         }
+    },
+    computed: {
+        getFilteredApplications(){
+            return (this.selectedCategory == 0)? this.applications: this.applications.filter(a => a.category_id == this.selectedCategory)
+        }
+    },
+    watch: {
+      selectedDate(val){
+          this.loadApplications()
+      }
     },
     mounted() {
         this.loadCategories()
