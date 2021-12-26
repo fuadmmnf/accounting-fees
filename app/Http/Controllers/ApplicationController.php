@@ -10,14 +10,14 @@ use Illuminate\Http\Request;
 
 class ApplicationController extends Controller {
 	public function index(Request $request) {
-        $selectedDate = Carbon::parse($request->query('selected_date'));
+        $selectedDate = Carbon::createFromFormat('d/m/Y', $request->query('date'));
         $categoryId = $request->query('category_id');
         $selectedDayApplications = Application::whereDate('date', $selectedDate);
         if($categoryId != 0){
             $selectedDayApplications->where('category_id', $categoryId);
         }
         $selectedDayApplications = $selectedDayApplications->get();
-        $selectedDayApplications->load('applicationfees', 'applicationfees.field');
+        $selectedDayApplications->load('category', 'applicationfees', 'applicationfees.field');
         return response()->json($selectedDayApplications);
 	}
 
@@ -64,7 +64,16 @@ class ApplicationController extends Controller {
 	}
 
 	public function destroy($id) {
-		Application::destroy($id);
+		$application = Application::find($id);
+        \DB::beginTransaction();
+        try {
+		$application->applicationfees()->delete();
+		$application->delete();
+        } catch (\Exception $exception){
+            \DB::rollBack();
+            return response()->json($exception->getMessage(), 500);
+        }
+        \DB::commit();
 		return response()->noContent();
 	}
 }
