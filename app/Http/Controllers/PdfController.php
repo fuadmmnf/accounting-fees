@@ -28,7 +28,7 @@ class PdfController extends Controller
         if ($category != 0) {
             $selectedDayApplications->where('category_id', $category);
         }
-        $selectedDayApplications->with('category')->with('applicationfees')->with('applicationfees.field')->chunk(200, function ($applications) use ($fields){
+        $selectedDayApplications->with('category')->with('applicationfees')->with('applicationfees.field')->chunk(200, function ($applications) use (&$fields){
             foreach ($applications as $application) {
                 foreach ($application->applicationfees as $applicationfee){
                     $fieldname = ($applicationfee->field_id? $applicationfee->field->name: $applicationfee->optional_field_name);
@@ -43,7 +43,7 @@ class PdfController extends Controller
             ['fields' => $fields, 'date' => $date, 'categoryName' => ($category == 0? 'সকল ধরন': Category::find($category)->name),]
         );
 
-        $fileName = 'Report' . substr(md5(), 7) . '.pdf';
+        $fileName = 'Report' . substr(md5(random_bytes(10)), 7) . '.pdf';
         return $pdf->stream($fileName);
     }
 }

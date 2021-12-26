@@ -67,15 +67,15 @@
     </span>
     </p>
 {{--    <div>@yield('content')</div>--}}
-    <table>
+    <table class="bordertable">
         <tr>
             <th>Field Name</th>
             <th>Amount</th>
         </tr>
-        @foreach($fields as $field)
+        @foreach($fields as $key=>$value)
         <tr>
-            <td>{{$field['name']}}</td>
-            <td>{{$field['amount']}}</td>
+            <td>{{$key}}</td>
+            <td>{{$value}} tk</td>
         </tr>
         @endforeach
     </table>
