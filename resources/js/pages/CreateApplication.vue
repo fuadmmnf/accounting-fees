@@ -31,7 +31,7 @@
                     class="col-md-3 col-xs-12 q-pr-md"
                     filled
                     type="number"
-                    v-model="applicationForm.amount"
+                    v-model.number="applicationForm.amount"
                     label="Application Value"
                     lazy-rules
                     :rules="[
@@ -46,9 +46,24 @@
                     v-if="getApplicationFields.length"
                     title="Fees"
                     dense
-                    :rows="getApplicationFields"
+                    :data="getApplicationFields"
                     :columns="columns"
-                />
+                    hide-pagination
+                >
+                    <template v-slot:body="props">
+                        <q-tr :props="props">
+                            <q-td key="name" :props="props">
+                                {{ props.row.optional_field_name }}
+                            </q-td>
+                            <q-td key="unit" :props="props">
+                                {{ `${props.row.amount} ${props.row.unit == 0? '%': 'tk'}` }}
+                            </q-td>
+                            <q-td key="amount" :props="props">
+                                {{ `${(props.row.unit == 0? (props.row.application_amount * props.row.amount/100.0): props.row.amount)} tk` }}
+                            </q-td>
+                        </q-tr>
+                    </template>
+                </q-table>
 
 
             <div>
@@ -80,13 +95,14 @@ export default {
         return {
             columns: [
                 {
-                    name: 'optional_field_name',
+                    name: 'name',
                     required: true,
+                    align: 'left',
                     label: 'Field Name',
                     field: row => row.optional_field_name,
                 },
-                { name: 'unit',  label: 'Rate(%|tk)',  field: row => `${row.amount} ${row.unit == 0? '%': 'tk'}`},
-                { name: 'amount',  label: 'Value', field: row => `${(row.unit == 0? (row.application_amount * row.amount/100.0): row.amount)} tk`, sortable: true },
+                { name: 'unit',  label: 'Rate(%/tk)', align: 'left', field: row => `${row.amount} ${row.unit == 0? '%': 'tk'}`},
+                { name: 'amount',  label: 'Value', align: 'left', field: row => `${(row.unit == 0? (row.application_amount * row.amount/100.0): row.amount)} tk`, sortable: true },
 
             ],
             categories: [],
@@ -119,6 +135,7 @@ export default {
                     application_amount: this.applicationForm.amount
                 }
             })
+            console.log(this.applicationForm.fields)
         },
         storeApplication() {
             this.$axios.post('/api/applications', this.applicationForm)
