@@ -21,9 +21,9 @@
                             <q-chip size="sm" class="col-md-5 col-xs-12 q-pr-sm q-pb-sm" v-for="fee in props.row.applicationfees" :key="fee.id">{{`${fee.field_id == null? fee.optional_field_name: fee.field.name}: ${fee.unit == 0? (props.row.amount * fee.amount/100.0): fee.amount } tk`}}</q-chip>
                         </div>
                     </q-td>
-                    <q-td key="action" :props="props">
-                        <q-btn size="sm" color="negative" text-color="white" icon="delete"></q-btn>
-                    </q-td>
+<!--                    <q-td key="action" :props="props">-->
+<!--                        <q-btn size="sm" color="negative" text-color="white" icon="delete"></q-btn>-->
+<!--                    </q-td>-->
                 </q-tr>
             </template>
 
@@ -92,13 +92,13 @@ export default {
                     style: 'width: 50%',
                     // field: row => row.amount,
                 },
-                {
-                    name: 'action',
-                    align: 'left',
-                    label: 'Action(s)',
-                    style: 'width: 10%',
-                    // field: row => row.amount,
-                },
+                // {
+                //     name: 'action',
+                //     align: 'left',
+                //     label: 'Action(s)',
+                //     style: 'width: 10%',
+                //     // field: row => row.amount,
+                // },
             ],
             categories: [],
             applications: [],
