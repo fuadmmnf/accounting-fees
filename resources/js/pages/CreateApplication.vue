@@ -2,6 +2,7 @@
     <div class="q-pa-lg q-ml-md">
         <q-form
             @submit="storeApplication"
+            @reset="clearForm"
             class="q-gutter-md"
         >
             <div class="row">
@@ -44,6 +45,7 @@
 
                 <q-table
                     v-if="getApplicationFields.length"
+                    class="q-mb-lg"
                     title="Fees"
                     dense
                     :data="getApplicationFields"
@@ -67,7 +69,11 @@
 
 
             <div>
-                <q-btn label="Generate Fees" type="button" color="primary" @click="generateFees"/>
+                <q-btn v-if="!getApplicationFields.length" label="Generate Fees" type="button" color="primary" @click="generateFees"/>
+                <div v-else class="row">
+                    <q-btn class="col-3 q-mr-md" label="Submit" type="submit" color="primary"/>
+                    <q-btn class="col-3 q-mr-md" label="Reset" type="reset" color="white" text-color="primary"/>
+                </div>
             </div>
         </q-form>
     </div>
@@ -137,6 +143,9 @@ export default {
             })
             console.log(this.applicationForm.fields)
         },
+        clearForm(){
+            this.applicationForm = generateApplicationTemplate()
+        },
         storeApplication() {
             this.$axios.post('/api/applications', this.applicationForm)
                 .then((res) => {
@@ -144,7 +153,7 @@ export default {
                         message: 'Application Created Successfully!'
                     })
 
-                    this.applicationForm = generateApplicationTemplate()
+                    this.clearForm()
                     scrollTo(0, 0)
                 })
         }
