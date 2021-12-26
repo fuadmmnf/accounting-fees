@@ -29,7 +29,7 @@
 
             <template v-slot:top-right>
                 <div class="row">
-                    <q-input dense class="col-md-5 q-pr-md q-pb-md" filled v-model="selectedDate" label="Date">
+                    <q-input dense class="col-md-6 q-pr-xs q-pb-md" filled v-model="selectedDate" label="Date">
                         <template v-slot:append>
                             <q-icon name="event" class="cursor-pointer">
                                 <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
@@ -42,7 +42,7 @@
                             </q-icon>
                         </template>
                     </q-input>
-                    <q-select class="col-md-5 q-pb-sm q-pr-sm" dense
+                    <q-select class="col-md-5 q-pb-sm q-pr-xs" dense
                               v-model="selectedCategory"
                               :options="categories"
                               option-label="label"
