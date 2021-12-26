@@ -38,6 +38,13 @@ class PdfController extends Controller
             };
         });
 
+        $fields = ['সর্বমোট রেজিস্ট্রেশন ফি' => $fields['রেজিস্ট্রেশন ফি'] + $fields['ই ফিস'] + $fields['এন ফিস']] + $fields;
+        $igr_fund = $fields['স্থানীয় সরকার কর'] * 3.5/100.0;
+        $fields = $fields + ['স্থানীয় - আই জি আর' => $igr_fund];
+        $fields = $fields + ['স্থানীয় - জেলা' => ($fields['স্থানীয় সরকার কর']-$igr_fund)/3.0];
+        $fields = $fields + ['স্থানীয় - উপজেলা' => ($fields['স্থানীয় সরকার কর']-$igr_fund)/3.0];
+        $fields = $fields + ['স্থানীয় - ইউনিয়ন' => ($fields['স্থানীয় সরকার কর']-$igr_fund)/3.0];
+
         $pdf = PDF::loadView(
             ['reports.daily', 'reports.monthly', 'reports.yearly'][$type],
             ['fields' => $fields, 'date' => $date, 'categoryName' => ($category == 0? 'সকল ধরন': Category::find($category)->name),]
