@@ -190,6 +190,7 @@ export default {
     mounted() {
         this.loadCategories()
         this.loadFields()
+        this.$root.$on('category-created', this.loadCategories)
     },
     methods: {
         loadCategories() {

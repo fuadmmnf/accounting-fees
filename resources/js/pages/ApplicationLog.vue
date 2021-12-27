@@ -155,6 +155,7 @@ export default {
             this.$axios.delete(`api/applications/${this.selectedApplicationId}`)
             .then((res) => {
                 this.confirmDeleteDialog = false
+
                 this.loadApplications()
             })
         }
