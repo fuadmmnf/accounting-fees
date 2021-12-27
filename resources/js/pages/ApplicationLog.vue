@@ -16,18 +16,43 @@
                     <q-td key="amount" :props="props">
                         {{ props.row.amount }} tk
                     </q-td>
-                    <q-td auto-width key="fees" :props="props">
-                        <div class="row">
-                            <q-chip size="sm" class="col-md-5 col-xs-12 q-pr-sm q-pb-sm" v-for="fee in props.row.applicationfees" :key="fee.id">{{`${fee.field_id == null? fee.optional_field_name: fee.field.name}: ${fee.unit == 0? (props.row.amount * fee.amount/100.0): fee.amount } tk`}}</q-chip>
-                        </div>
-                    </q-td>
+<!--                    <q-td auto-width key="fees" :props="props">-->
+<!--                        <div class="row">-->
+<!--                            <q-chip size="sm" class="col-md-5 col-xs-12 q-pr-sm q-pb-sm" v-for="fee in props.row.applicationfees" :key="fee.id">{{`${fee.field_id == null? fee.optional_field_name: fee.field.name}: ${fee.unit == 0? (props.row.amount * fee.amount/100.0): fee.amount } tk`}}</q-chip>-->
+<!--                        </div>-->
+<!--                    </q-td>-->
                     <q-td key="action" :props="props">
-                        <q-btn size="sm" color="accent" text-color="white" icon="detail"></q-btn>
+                        <q-btn size="sm" color="accent" text-color="white" icon="info" @click="showDetail = true"></q-btn>
+                        <q-dialog :id="'detail-' + props.row.id" v-model="showDetail" persistent>
+                            <q-card >
+                                <q-card-section class="row items-center">
+                                    <span class="text-bold">Deed Detail</span>
+                                </q-card-section>
+                                <q-card-section class="q-pt-none q-pb-xs">
+                                    <table>
+                                        <tr>
+                                            <th align="left">Field Name</th>
+                                            <th align="left">Amount</th>
+                                        </tr>
+
+                                        <tr v-for="fee in props.row.applicationfees" :key="fee.id">
+                                            <td align="left">{{fee.field_id == null? fee.optional_field_name: fee.field.name }}</td>
+                                            <td align="left">{{fee.unit == 0? (props.row.amount * fee.amount/100.0): fee.amount}} tk</td>
+                                        </tr>
+                                    </table>
+                                </q-card-section>
+                                <q-card-actions align="right">
+                                    <q-btn flat label="Cancel" color="primary" @click="showDetail=false" />
+                                </q-card-actions>
+                            </q-card>
+                        </q-dialog>
+
+
+
                         <q-btn size="sm" color="negative" text-color="white" icon="delete" @click="confirmDeleteDialog = true"></q-btn>
                         <q-dialog :id="'confirmation-' + props.row.id" v-model="confirmDeleteDialog" persistent :key="props.row.id">
                             <q-card>
                                 <q-card-section class="row items-center">
-                                    <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
                                     <span class="q-ml-sm">Are you sure you want to delete?</span>
                                 </q-card-section>
 
@@ -84,6 +109,7 @@ export default {
     data(){
         return {
             confirmDeleteDialog: false,
+            showDetail: false,
             selectedApplicationId: 0,
             selectedDate: date.formatDate(Date.now(), 'DD/MM/YYYY'),
             selectedCategory: 0,
@@ -104,13 +130,13 @@ export default {
                     label: 'Property Value',
                     // field: row => row.amount,
                 },
-                {
-                    name: 'fees',
-                    align: 'left',
-                    label: 'Fees',
-                    style: 'width: 50%',
-                    // field: row => row.amount,
-                },
+                // {
+                //     name: 'fees',
+                //     align: 'left',
+                //     label: 'Fees',
+                //     style: 'width: 50%',
+                //     // field: row => row.amount,
+                // },
                 {
                     name: 'action',
                     align: 'left',
