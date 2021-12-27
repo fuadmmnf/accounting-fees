@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
+Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store']);
+Route::get('/fields', [\App\Http\Controllers\FieldController::class, 'index']);
 
 
 Route::post('/login', [\App\Http\Controllers\ApplicationController::class, 'login']);

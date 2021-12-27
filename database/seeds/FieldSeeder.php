@@ -6,7 +6,7 @@ class FieldSeeder extends Seeder
 {
     public function run()
     {
-        $fields = ['রেজিস্ট্রেশন ফি', 'ই ফিস', 'এন ফিস', 'স্ট্যাম্প শুল্ক', 'স্থানীয় সরকার কর', 'উৎসে আয়কর (53H)', 'এন এন ফিস'];
+        $fields = ['রেজিস্ট্রেশন ফি', 'ই ফিস', 'এন ফিস', 'স্ট্যাম্প শুল্ক', 'স্থানীয় সরকার কর', 'উৎসে আয়কর (53H)', 'এন এন ফিস', '53FF', 'ভ্যাট'];
         foreach ($fields as $field){
             \App\Field::create(['name' => $field]);
         }

@@ -14,7 +14,7 @@ class DefaultFeeSeeder extends Seeder {
         ];
 
         for ($c= 0; $c < count($categories) -1 ; $c++)  {
-            for ($i = 0; $i < count($fields); $i++) {
+            for ($i = 0; $i < count($fields)-2; $i++) { // excluding 53ff  + vat
                 if ($defaults[$c][$i] == '') continue;
 
                 $val = explode('_', $defaults[$c][$i]);
