@@ -75,16 +75,23 @@
                            @click="showCustomFieldDialog"/>
 
                     <q-dialog v-model="isAddFieldModalVisible" persistent>
-                        <q-card style="min-width: 350px">
+                        <q-card style="min-width: 400px">
                             <q-card-section>
                                 <div class="text-h6">Custom Field</div>
                             </q-card-section>
 
                             <q-card-section class="q-pt-none">
                                 <div class="row">
-                                    <q-input class="col-md-5 col-xs-12 q-pb-sm q-pr-sm" dense
-                                             v-model="customField.optional_field_name" autofocus label="Field Name"/>
-                                    <q-select class="col-md-4 col-xs-12  q-pb-sm q-pr-sm" dense
+                                    <q-select class="col-md-5 col-xs-12  q-pb-sm q-pr-sm" dense
+                                              v-model="customField.field_id"
+                                              :options="fields"
+                                              option-label="name"
+                                              option-value="id"
+                                              map-options
+                                              emit-value
+                                              label="Field Name"/>
+
+                                    <q-select class="col-md-5 col-xs-12  q-pb-sm q-pr-sm" dense
                                               v-model="customField.unit"
                                               :options="[{label: 'Percentage (%)', value: 0}, {label: 'Taka (tk)', value: 1}]"
                                               option-label="label"
@@ -170,6 +177,7 @@ export default {
                 },
             ],
             categories: [],
+            fields: [],
             customField: {},
             applicationForm: generateApplicationTemplate(),
         }
@@ -181,6 +189,7 @@ export default {
     },
     mounted() {
         this.loadCategories()
+        this.loadFields()
     },
     methods: {
         loadCategories() {
@@ -188,6 +197,12 @@ export default {
                 .then((res) => {
                     this.categories = res.data
                 })
+        },
+        loadFields(){
+          this.$axios.get('/api/fields')
+          .then((res) => {
+              this.fields = res.data
+          })
         },
         showCustomFieldDialog() {
             this.isAddFieldModalVisible = true
