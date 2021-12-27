@@ -16,7 +16,8 @@
                 </q-toolbar-title>
 
                 <div>
-                    <q-btn icon="add" :to="{name: 'create'}" color="white" text-color="primary" label="Create"></q-btn>
+                    <q-btn class="q-mr-lg" icon="add" :to="{name: 'create'}" color="white" text-color="primary" label="Create"></q-btn>
+                    <q-btn icon="logout" @click="logout"></q-btn>
                 </div>
             </q-toolbar>
         </q-header>
@@ -88,6 +89,12 @@ export default {
                 },
 
             ]
+        }
+    },
+    methods: {
+        logout(){
+            localStorage.removeItem('user')
+            this.$router.replace('/login')
         }
     }
 }

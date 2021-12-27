@@ -14,6 +14,9 @@ export default function () {
 
   // TODO: Verify if user is correctly login
   Router.beforeEach((to, from, next) => {
+      if(!localStorage.getItem('user') && to.name != 'login'){
+          next('/login')
+      }
     next()
   })
 

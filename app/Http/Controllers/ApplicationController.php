@@ -63,6 +63,14 @@ class ApplicationController extends Controller {
 		//
 	}
 
+	public function login(Request $request){
+	    $info = $request->all();
+	    if($info['username'] == 'accounting' && $info['password'] == 'accountingqwer1234'){
+	        return response()->noContent();
+        }
+	    return response()->json('error', 401);
+    }
+
 	public function destroy($id) {
 		$application = Application::find($id);
         \DB::beginTransaction();
