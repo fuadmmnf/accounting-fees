@@ -1,7 +1,7 @@
 <template>
     <div class="q-pa-md">
         <q-table
-            title="Deeds"
+            :title="`Deeds (${getFilteredApplications.length})`"
             :data="getFilteredApplications"
             :columns="columns"
             :rows-per-page-options="[0]"
@@ -21,9 +21,26 @@
                             <q-chip size="sm" class="col-md-5 col-xs-12 q-pr-sm q-pb-sm" v-for="fee in props.row.applicationfees" :key="fee.id">{{`${fee.field_id == null? fee.optional_field_name: fee.field.name}: ${fee.unit == 0? (props.row.amount * fee.amount/100.0): fee.amount } tk`}}</q-chip>
                         </div>
                     </q-td>
-<!--                    <q-td key="action" :props="props">-->
-<!--                        <q-btn size="sm" color="negative" text-color="white" icon="delete"></q-btn>-->
-<!--                    </q-td>-->
+                    <q-td key="action" :props="props">
+                        <q-btn size="sm" color="accent" text-color="white" icon="detail"></q-btn>
+                        <q-btn size="sm" color="negative" text-color="white" icon="delete" @click="confirmDeleteDialog = true"></q-btn>
+                        <q-dialog :id="'confirmation-' + props.row.id" v-model="confirmDeleteDialog" persistent :key="props.row.id">
+                            <q-card>
+                                <q-card-section class="row items-center">
+                                    <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
+                                    <span class="q-ml-sm">Are you sure you want to delete?</span>
+                                </q-card-section>
+
+                                <q-card-actions align="right">
+                                    <q-btn flat label="Cancel" color="primary" v-close-popup />
+                                    <q-btn flat label="Confirm" color="primary" @click="() => {
+                                        selectedApplicationId = props.row.id
+                                        deleteApplication()
+                                    }" />
+                                </q-card-actions>
+                            </q-card>
+                        </q-dialog>
+                    </q-td>
                 </q-tr>
             </template>
 
@@ -66,6 +83,8 @@ export default {
     name: "ApplicationLog",
     data(){
         return {
+            confirmDeleteDialog: false,
+            selectedApplicationId: 0,
             selectedDate: date.formatDate(Date.now(), 'DD/MM/YYYY'),
             selectedCategory: 0,
             pagination: {
@@ -92,13 +111,13 @@ export default {
                     style: 'width: 50%',
                     // field: row => row.amount,
                 },
-                // {
-                //     name: 'action',
-                //     align: 'left',
-                //     label: 'Action(s)',
-                //     style: 'width: 10%',
-                //     // field: row => row.amount,
-                // },
+                {
+                    name: 'action',
+                    align: 'left',
+                    label: 'Action(s)',
+                    style: 'width: 10%',
+                    // field: row => row.amount,
+                },
             ],
             categories: [],
             applications: [],
@@ -129,6 +148,14 @@ export default {
             this.$axios.get(`/api/applications?date=${this.selectedDate}&category_id=${this.selectedCategory}`)
             .then((res) => {
                 this.applications = res.data
+            })
+        },
+        deleteApplication(){
+
+            this.$axios.delete(`api/applications/${this.selectedApplicationId}`)
+            .then((res) => {
+                this.confirmDeleteDialog = false
+                this.loadApplications()
             })
         }
     }

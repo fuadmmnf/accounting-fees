@@ -26,3 +26,4 @@ Route::get('/fields', [\App\Http\Controllers\FieldController::class, 'index']);
 Route::post('/login', [\App\Http\Controllers\ApplicationController::class, 'login']);
 Route::get('/applications', [\App\Http\Controllers\ApplicationController::class, 'index']);
 Route::post('/applications', [\App\Http\Controllers\ApplicationController::class, 'store']);
+Route::delete('/applications/{id}', [\App\Http\Controllers\ApplicationController::class, 'destroy']);
