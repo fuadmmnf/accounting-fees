@@ -16,7 +16,7 @@ class PdfController extends Controller
         $date = Carbon::createFromFormat('d/m/Y', $request->query('date'));
         $category = $request->query('category_id');
         $fields = [];
-
+        $count = 0;
         $selectedDayApplications = Application::query();
         if ($type == 0) {
             $selectedDayApplications->whereDate('date', $date);
@@ -28,7 +28,8 @@ class PdfController extends Controller
         if ($category != 0) {
             $selectedDayApplications->where('category_id', $category);
         }
-        $selectedDayApplications->with('category')->with('applicationfees')->with('applicationfees.field')->chunk(200, function ($applications) use (&$fields){
+        $selectedDayApplications->with('category')->with('applicationfees')->with('applicationfees.field')->chunk(200, function ($applications) use (&$fields, &$count){
+            $count += count($applications);
             foreach ($applications as $application) {
                 foreach ($application->applicationfees as $applicationfee){
                     $fieldname = ($applicationfee->field_id? $applicationfee->field->name: $applicationfee->optional_field_name);
@@ -47,7 +48,7 @@ class PdfController extends Controller
 
         $pdf = PDF::loadView(
             ['reports.daily', 'reports.monthly', 'reports.yearly'][$type],
-            ['fields' => $fields, 'date' => $date, 'categoryName' => ($category == 0? 'সকল ধরন': Category::find($category)->name),]
+            ['fields' => $fields, 'date' => $date, 'categoryName' => ($category == 0? 'সকল ধরন': Category::find($category)->name), 'count' => $count]
         );
 
         $fileName = 'Report' . substr(md5(random_bytes(10)), 7) . '.pdf';

@@ -63,7 +63,7 @@
         {{--        <small>প্রোঃ {{ $store->proprietor }}</small>--}}
         {{--    @endif--}}
         <span align="center" style="color: #397736; border-bottom: 1px solid #397736;">
-      @yield('report_title') | {{$categoryName}}
+      @yield('report_title') | {{$categoryName}} ({{$count}})
     </span>
     </p>
 {{--    <div>@yield('content')</div>--}}
