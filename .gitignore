@@ -2,6 +2,7 @@
 /public/hot
 /public/Archive.zip
 /public/storage
+/public/css/*
 /storage/*.key
 /vendor
 /public/js
