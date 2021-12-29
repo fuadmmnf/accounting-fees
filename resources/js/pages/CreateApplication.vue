@@ -223,13 +223,27 @@ export default {
             }
         },
         generateFees() {
-            let defaultFees = this.categories.find(c => c.id === this.applicationForm.category_id).defaultfees
-            this.applicationForm.fields = defaultFees.map(df => {
+            let category = this.categories.find(c => c.id === this.applicationForm.category_id)
+            this.applicationForm.fields = category.defaultfees.map(df => {
+                let a = df.amount
+                if(category.name == 'বায়নাপত্র দলিল' && df.field.name == 'রেজিস্ট্রেশন ফি'){
+                    if(this.applicationForm.amount <= 500000) a = 500
+                    else if(this.applicationForm.amount <= 5000000) a = 1000
+                    else a = 2000
+
+                } else if (category.name == 'বন্টননামা দলিল'  && df.field.name == 'রেজিস্ট্রেশন ফি'){
+                    if(this.applicationForm.amount <= 300000) a = 500
+                    else if(this.applicationForm.amount <= 1000000) a = 700
+                    else if(this.applicationForm.amount <= 3000000) a = 1200
+                    else if(this.applicationForm.amount <= 5000000) a = 1800
+                    else a = 2000
+                }
+
                 return {
                     field_id: df.field.id,
                     optional_field_name: df.field.name,
                     unit: df.unit,
-                    amount: df.amount,
+                    amount: a,
                     application_amount: this.applicationForm.amount
                 }
             })
