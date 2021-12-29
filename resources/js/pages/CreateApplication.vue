@@ -107,6 +107,7 @@
                             <q-card-actions align="right" class="text-primary">
                                 <q-btn flat label="Cancel" v-close-popup/>
                                 <q-btn flat label="Add" @click="() => {
+                                    customField.optional_field_name = fields.find(f => f.id == customField.field_id).name
                                         applicationForm.fields = [...applicationForm.fields, {...customField}]
                                         isAddFieldModalVisible = false
                                     }"/>
@@ -199,11 +200,11 @@ export default {
                     this.categories = res.data
                 })
         },
-        loadFields(){
-          this.$axios.get('/api/fields')
-          .then((res) => {
-              this.fields = res.data
-          })
+        loadFields() {
+            this.$axios.get('/api/fields')
+                .then((res) => {
+                    this.fields = res.data
+                })
         },
         showCustomFieldDialog() {
             this.isAddFieldModalVisible = true
