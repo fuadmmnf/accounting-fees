@@ -57,7 +57,11 @@
                 <template v-slot:body="props">
                     <q-tr :props="props">
                         <q-td key="name" :props="props">
-                            {{ props.row.optional_field_name }}
+                            <div class="row">
+                                <q-btn v-if="props.rowIndex >= defaultFeesCountForApplication" class="col-1" size="sm" color="negative" text-color="white" icon="delete" @click="applicationForm.fields = applicationForm.fields.filter(f => f.field_id != props.row.field_id)"></q-btn>
+                                <span class="col q-ml-xs">{{ props.row.optional_field_name }}</span>
+                            </div>
+
                         </q-td>
                         <q-td key="unit" :props="props">
                             {{ `${props.row.amount} ${props.row.unit == 0 ? '%' : 'tk'}` }}
@@ -67,6 +71,7 @@
                                 `${(props.row.unit == 0 ? (props.row.application_amount * props.row.amount / 100.0) : props.row.amount)} tk`
                             }}
                         </q-td>
+
                     </q-tr>
                 </template>
 
@@ -180,6 +185,7 @@ export default {
             categories: [],
             fields: [],
             customField: {},
+            defaultFeesCountForApplication: 0,
             applicationForm: generateApplicationTemplate(),
         }
     },
@@ -227,6 +233,7 @@ export default {
                     application_amount: this.applicationForm.amount
                 }
             })
+            this.defaultFeesCountForApplication = this.applicationForm.fields.length
             this.isTableVisible = this.applicationForm.fields.length > 0 || (this.categories.find(c => c.id == this.applicationForm.category_id).name == 'অন্যান্য')
         },
         clearForm() {
