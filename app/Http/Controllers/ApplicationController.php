@@ -65,7 +65,7 @@ class ApplicationController extends Controller {
 
 	public function login(Request $request){
 	    $info = $request->all();
-	    if($info['username'] == 'accounting' && $info['password'] == 'accountingqwer1234'){
+	    if($info['username'] == 'demo' && $info['password'] == 'demo12345'){
 	        return response()->noContent();
         }
 	    return response()->json('error', 401);
