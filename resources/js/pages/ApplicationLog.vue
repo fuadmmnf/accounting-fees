@@ -48,7 +48,10 @@
 
 
 
-                        <q-btn size="sm" color="negative" text-color="white" icon="delete" @click="confirmDeleteDialog = true"></q-btn>
+                        <q-btn size="sm" color="negative" text-color="white" icon="delete" @click="() => {
+                            selectedApplicationId = props.row.id
+                            confirmDeleteDialog = true
+                        }"></q-btn>
                         <q-dialog :id="'confirmation-' + props.row.id" v-model="confirmDeleteDialog" persistent :key="props.row.id">
                             <q-card>
                                 <q-card-section class="row items-center">
@@ -58,7 +61,6 @@
                                 <q-card-actions align="right">
                                     <q-btn flat label="Cancel" color="primary" v-close-popup />
                                     <q-btn flat label="Confirm" color="primary" @click="() => {
-                                        selectedApplicationId = props.row.id
                                         deleteApplication()
                                     }" />
                                 </q-card-actions>
