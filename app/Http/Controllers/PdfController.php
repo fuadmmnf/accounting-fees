@@ -21,7 +21,7 @@ class PdfController extends Controller
         if ($type == 0) {
             $selectedDayApplications->whereDate('date', $date);
         } elseif ($type == 1) {
-            $selectedDayApplications->whereMonth('date', $date);
+            $selectedDayApplications->whereMonth('date', $date)->whereYear('date', $date);
         } else {
             $selectedDayApplications->whereYear('date', $date);
         }
