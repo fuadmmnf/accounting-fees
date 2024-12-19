@@ -6,7 +6,7 @@ use App\Application;
 use App\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Meneses\LaravelMpdf\Facades\LaravelMpdf as PDF;
+use ZanySoft\LaravelPDF\Facades\PDF;
 
 class PdfController extends Controller
 {
@@ -28,27 +28,42 @@ class PdfController extends Controller
         if ($category != 0) {
             $selectedDayApplications->where('category_id', $category);
         }
-        $selectedDayApplications->with('category')->with('applicationfees')->with('applicationfees.field')->chunk(200, function ($applications) use (&$fields, &$count){
+
+        $selectedDayApplications->with('category')->with('applicationfees')->with('applicationfees.field')->chunk(200, function ($applications) use (&$fields, &$count) {
             $count += count($applications);
             foreach ($applications as $application) {
-                foreach ($application->applicationfees as $applicationfee){
-                    $fieldname = ($applicationfee->field_id? $applicationfee->field->name: $applicationfee->optional_field_name);
-                    if(!isset($fields[$fieldname])) $fields[$fieldname] = 0;
-                    $fields[$fieldname] += ($applicationfee->unit == 0? ($application->amount * $applicationfee->amount/100.0): $applicationfee->amount);
+                foreach ($application->applicationfees as $applicationfee) {
+                    $fieldname = ($applicationfee->field_id ? $applicationfee->field->name : $applicationfee->optional_field_name);
+                    if (!isset($fields[$fieldname])) $fields[$fieldname] = 0;
+                    $fields[$fieldname] += ($applicationfee->unit == 0 ? ($application->amount * $applicationfee->amount / 100.0) : $applicationfee->amount);
                 }
             };
         });
 
         $fields = ['সর্বমোট রেজিস্ট্রেশন ফি' => $fields['রেজিস্ট্রেশন ফি'] + $fields['ই ফিস'] + $fields['এন ফিস']] + $fields;
-        $igr_fund = $fields['স্থানীয় সরকার কর'] * 3.5/100.0;
+        $igr_fund = $fields['স্থানীয় সরকার কর'] * 3.5 / 100.0;
         $fields = $fields + ['স্থানীয় - আই জি আর' => $igr_fund];
-        $fields = $fields + ['স্থানীয় - জেলা' => ($fields['স্থানীয় সরকার কর']-$igr_fund)/3.0];
-        $fields = $fields + ['স্থানীয় - উপজেলা' => ($fields['স্থানীয় সরকার কর']-$igr_fund)/3.0];
-        $fields = $fields + ['স্থানীয় - ইউনিয়ন' => ($fields['স্থানীয় সরকার কর']-$igr_fund)/3.0];
+        $fields = $fields + ['স্থানীয় - জেলা' => ($fields['স্থানীয় সরকার কর'] - $igr_fund) / 3.0];
+        $fields = $fields + ['স্থানীয় - উপজেলা' => ($fields['স্থানীয় সরকার কর'] - $igr_fund) / 3.0];
+        $fields = $fields + ['স্থানীয় - ইউনিয়ন' => ($fields['স্থানীয় সরকার কর'] - $igr_fund) / 3.0];
 
-        $pdf = PDF::loadView(
+        $pdf = PDF::make('document.pdf');
+        $fontdata = array(
+            'kalpurush' => [
+                'R' => 'kalpurush.ttf',      // regular font
+                'B' => 'kalpurush.ttf',     // optional: bold font
+                'I' => 'kalpurush.ttf',     // optional: italic font
+                'BI' => 'kalpurush.ttf',      // optional: bold-italic font
+                'useOTL' => 0xFF,    // required for complicated langs like Persian, Arabic and Chinese
+                'useKashida' => 75,  // required for complicated langs like Persian, Arabic and Chinese
+            ]
+            // ...add as many as you want.
+        );
+
+        $pdf->addCustomFont($fontdata, true);
+        $pdf->loadView(
             ['reports.daily', 'reports.monthly', 'reports.yearly'][$type],
-            ['fields' => $fields, 'date' => $date, 'categoryName' => ($category == 0? 'সকল ধরন': Category::find($category)->name), 'count' => $count]
+            ['fields' => $fields, 'date' => $date, 'categoryName' => ($category == 0 ? 'সকল ধরন' : Category::find($category)->name), 'count' => $count]
         );
 
         $fileName = 'Report' . substr(md5(random_bytes(10)), 7) . '.pdf';

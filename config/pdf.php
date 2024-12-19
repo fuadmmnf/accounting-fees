@@ -1,47 +1,98 @@
 <?php
 
 return [
-    'mode' => 'utf-8',
-    'format' => 'A4',
-    'default_font_size' => '12',
-    'default_font' => 'sans-serif',
-    'margin_left' => 10,
-    'margin_right' => 10,
-    'margin_top' => 5,
-    'margin_bottom' => 20,
-    'margin_header' => 2,
-    'margin_footer' => 2,
-    'orientation' => 'P',
-    'title' => 'Dokan Khata',
+    'title' => 'Laravel PDF',
+
     'author' => '',
-    'watermark' => '',
+
+    /**
+     * 'c'  Core - non-embedded fonts only
+     * 's'  Subsetting fonts - Embedded Unicode fonts
+     */
+    'mode' => 's',
+
+    /*
+     * Page size A4, A3, latter etc.
+     */
+    'format' => 'A4',
+
+    /*
+     * Default font zise for all text
+     */
+    'default_font_size' => '13',
+
+    /*
+     * Default font for all text
+     */
+    'default_font' => 'sans-serif',
+
+    /*
+     * Path for font folder
+     *
+     * don't forget the trailing slash!
+     */
+    'custom_font_path' => base_path('/resources/fonts/'),
+
+    /*
+     * Content direct ltr or rtl
+     */
+    'direction' => 'ltr',
+
+    /*
+     * Page left margin
+     */
+    'margin_left' => 10,
+
+    /*
+     * Page right margin
+     */
+    'margin_right' => 10,
+
+    /*
+     * Page top margin
+     */
+    'margin_top' => 10,
+
+    /*
+     * Page bottom margin
+     */
+    'margin_bottom' => 10,
+
+    /*
+     * Page header margin
+     */
+    'margin_header' => 0,
+
+    /*
+     * Page footer margin
+     */
+    'margin_footer' => 0,
+
+    /*
+     * Page orientation L - landscape, P - portrait
+     */
+    'orientation' => 'P',
+
+    /**
+     * Show watermark
+     */
     'show_watermark' => false,
+
+    /**
+     * Watermark text
+     */
+    'watermark' => 'Document',
     'watermark_font' => 'sans-serif',
+
+    /**
+     * Set water mark display.
+     * 'fullpage', 'fullwidth', 'real', 'default', 'none'
+     */
     'display_mode' => 'fullpage',
+
+    /**
+     * Set value 0 to 1
+     */
     'watermark_text_alpha' => 0.1,
-    'auto_language_detection' => false,
-    'temp_dir' => rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR),
-    'pdfa' => false,
-    'pdfaauto' => false,
-    'custom_font_dir' => base_path('resources/fonts/'), // don't forget the trailing slash!
-    'custom_font_data' => [
-        'kalpurush' => [
-            'R' => 'kalpurush.ttf',    // regular font
-            'B' => 'kalpurush.ttf',       // optional: bold font
-            'I' => 'kalpurushi.ttf',     // optional: italic font
-            'BI' => 'kalpurush.ttf', // optional: bold-italic font
-            'useOTL' => 0xFF,    // required for complicated langs like Persian, Arabic and Chinese
-            'useKashida' => 75,  // required for complicated langs like Persian, Arabic and Chinese
-        ],
-        'adorsholipi' => [
-            'R' => 'AdorshoLipi/AdorshoLipi.ttf',    // regular font
-            'B' => 'AdorshoLipi/AdorshoLipi.ttf',       // optional: bold font
-            'I' => 'AdorshoLipi/AdorshoLipi.ttf',     // optional: italic font
-            'BI' => 'AdorshoLipi/AdorshoLipi.ttf', // optional: bold-italic font
-            'useOTL' => 0xFF,    // required for complicated langs like Persian, Arabic and Chinese
-            'useKashida' => 75,  // required for complicated langs like Persian, Arabic and Chinese
-        ]
-        // ...add as many as you want.
-    ]
 
 ];

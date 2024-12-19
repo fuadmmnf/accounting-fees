@@ -6,7 +6,7 @@
             class="q-gutter-md"
         >
             <div class="row">
-                <q-input class="col-md-3 col-xs-12 q-pr-md q-pb-md" filled v-model="applicationForm.date" label="Date">
+                <q-input class="col-md-2 col-xs-12 q-pr-md q-pb-md" filled v-model="applicationForm.date" label="Date">
                     <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                             <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
@@ -20,7 +20,10 @@
                     </template>
                 </q-input>
 
-                <q-select class="col-md-4 col-xs-12 q-pr-md q-pb-md" filled v-model="applicationForm.category_id"
+                <q-select class="col-md-2 col-xs-12 q-pr-md q-pb-md" filled v-model="applicationForm.type"
+                          :options="['union', 'corporation']"
+                          label="Type"/>
+                <q-select class="col-md-3 col-xs-12 q-pr-md q-pb-md" filled v-model="applicationForm.category_id"
                           :options="categories"
                           option-label="name"
                           option-value="id"
@@ -58,7 +61,9 @@
                     <q-tr :props="props">
                         <q-td key="name" :props="props">
                             <div class="row">
-                                <q-btn v-if="props.rowIndex >= defaultFeesCountForApplication" class="col-1" size="sm" color="negative" text-color="white" icon="delete" @click="applicationForm.fields = applicationForm.fields.filter(f => f.field_id != props.row.field_id)"></q-btn>
+                                <q-btn v-if="props.rowIndex >= defaultFeesCountForApplication" class="col-1" size="sm"
+                                       color="negative" text-color="white" icon="delete"
+                                       @click="applicationForm.fields = applicationForm.fields.filter(f => f.field_id != props.row.field_id)"></q-btn>
                                 <span class="col q-ml-xs">{{ props.row.optional_field_name }}</span>
                             </div>
 
@@ -142,6 +147,7 @@ import {date} from 'quasar'
 
 const generateApplicationTemplate = () => {
     return {
+        type: 'union',
         category_id: '',
         date: date.formatDate(Date.now(), 'DD/MM/YYYY'),
         amount: '',
@@ -226,16 +232,22 @@ export default {
             let category = this.categories.find(c => c.id === this.applicationForm.category_id)
             this.applicationForm.fields = category.defaultfees.map(df => {
                 let a = df.amount
-                if(category.name == 'বায়নাপত্র দলিল' && df.field.name == 'রেজিস্ট্রেশন ফি'){
-                    if(this.applicationForm.amount <= 500000) a = 500
-                    else if(this.applicationForm.amount <= 5000000) a = 1000
+
+                if(df.field.name === 'উৎসে আয়কর (53H)' && this.applicationForm.type === 'corporation'){
+                    a = 6;
+                }
+
+
+                if (category.name == 'বায়নাপত্র দলিল' && df.field.name == 'রেজিস্ট্রেশন ফি') {
+                    if (this.applicationForm.amount <= 500000) a = 500
+                    else if (this.applicationForm.amount <= 5000000) a = 1000
                     else a = 2000
 
-                } else if (category.name == 'বন্টননামা দলিল'  && df.field.name == 'রেজিস্ট্রেশন ফি'){
-                    if(this.applicationForm.amount <= 300000) a = 500
-                    else if(this.applicationForm.amount <= 1000000) a = 700
-                    else if(this.applicationForm.amount <= 3000000) a = 1200
-                    else if(this.applicationForm.amount <= 5000000) a = 1800
+                } else if (category.name == 'বন্টননামা দলিল' && df.field.name == 'রেজিস্ট্রেশন ফি') {
+                    if (this.applicationForm.amount <= 300000) a = 500
+                    else if (this.applicationForm.amount <= 1000000) a = 700
+                    else if (this.applicationForm.amount <= 3000000) a = 1200
+                    else if (this.applicationForm.amount <= 5000000) a = 1800
                     else a = 2000
                 }
 

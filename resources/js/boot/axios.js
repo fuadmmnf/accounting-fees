@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 const axiosContext = axios.create({
-    baseURL: process.env.NODE_ENV === 'production' ? 'https://sroregister.com' : 'http://localhost:8000',
+    baseURL: process.env.NODE_ENV === 'production' ? 'https://sroregister.com' : 'http://127.0.0.1',
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
         'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content

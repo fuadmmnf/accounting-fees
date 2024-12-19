@@ -6,7 +6,7 @@
     <style>
 
         body {
-            font-family: 'kalpurush', 'adorsholipi', sans-serif;
+            font-family: 'kalpurush', sans-serif;
         }
 
         table {
@@ -16,7 +16,7 @@
 
         th, td {
             padding: 5px;
-            font-family: 'kalpurush', 'adorsholipi', sans-serif;
+            font-family: 'kalpurush', sans-serif;
             font-size: 14px;
         }
 

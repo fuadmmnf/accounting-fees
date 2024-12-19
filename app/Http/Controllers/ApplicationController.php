@@ -23,6 +23,7 @@ class ApplicationController extends Controller {
 
 	public function store(Request $request) {
         $validated = $request->validate([
+            'type' => 'sometimes',
             'category_id' => 'required|numeric',
             'date' => 'required',
             'amount' => 'required|numeric',
@@ -32,6 +33,7 @@ class ApplicationController extends Controller {
         \DB::beginTransaction();
         try {
             $application = Application::create([
+                'type' => $validated['type']?? 'union',
                 'category_id' => $validated['category_id'],
                 'date' => Carbon::createFromFormat('d/m/Y', $validated['date']),
                 'amount' => $validated['amount']
